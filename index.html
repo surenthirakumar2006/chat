@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>✨ Mystical Persuasion Bot</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1447 50%, #2d1b69 100%);
+            color: #e0e0ff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Magical particles background */
+        body::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background-image: 
+                radial-gradient(2px 2px at 20% 30%, rgba(255, 215, 0, 0.3), transparent),
+                radial-gradient(2px 2px at 60% 70%, rgba(138, 43, 226, 0.3), transparent),
+                radial-gradient(1px 1px at 50% 50%, rgba(255, 105, 180, 0.3), transparent),
+                radial-gradient(2px 2px at 80% 10%, rgba(0, 255, 255, 0.3), transparent);
+            background-size: 200px 200px;
+            animation: float 20s linear infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes float {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-50%, -50%); }
+        }
+        
+        .container {
+            background: rgba(20, 20, 40, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 700px;
+            width: 90%;
+            box-shadow: 0 8px 32px 0 rgba(138, 43, 226, 0.37),
+                        0 0 60px rgba(138, 43, 226, 0.2),
+                        inset 0 0 20px rgba(138, 43, 226, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            z-index: 1;
+        }
+        
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #FFD700, #FFA500, #FF69B4, #DA70D6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+            animation: glow 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.5)); }
+            to { filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.8)); }
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #b8b8ff;
+            margin-bottom: 20px;
+            font-size: 0.95em;
+            opacity: 0.9;
+        }
+        
+        #status {
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.3), rgba(75, 0, 130, 0.3));
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(186, 85, 211, 0.3);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(138, 43, 226, 0.2);
+        }
+        
+        .status-item {
+            text-align: center;
+        }
+        
+        .status-label {
+            font-size: 0.85em;
+            color: #9999ff;
+            margin-bottom: 5px;
+        }
+        
+        .status-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #FFD700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+        
+        #chat {
+            background: rgba(10, 10, 30, 0.6);
+            border: 1px solid rgba(138, 43, 226, 0.3);
+            border-radius: 15px;
+            height: 400px;
+            overflow-y: auto;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        #chat::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        #chat::-webkit-scrollbar-track {
+            background: rgba(20, 20, 40, 0.5);
+            border-radius: 10px;
+        }
+        
+        #chat::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #8B5CF6, #6366F1);
+            border-radius: 10px;
+        }
+        
+        .message {
+            margin: 15px 0;
+            padding: 12px 18px;
+            border-radius: 15px;
+            animation: slideIn 0.3s ease-out;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .user {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin-left: auto;
+            text-align: right;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .bot {
+            background: linear-gradient(135deg, #2d1b69 0%, #1a1447 100%);
+            margin-right: auto;
+            box-shadow: 0 4px 15px rgba(138, 43, 226, 0.3);
+            border: 1px solid rgba(186, 85, 211, 0.3);
+        }
+        
+        .unlocked {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            color: #1a1447;
+            font-weight: bold;
+            text-align: center;
+            margin: 15px auto;
+            box-shadow: 0 4px 20px rgba(255, 215, 0, 0.5);
+            animation: pulse 1s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .input-container {
+            display: flex;
+            gap: 10px;
+        }
+        
+        #input {
+            flex: 1;
+            padding: 15px;
+            background: rgba(20, 20, 40, 0.8);
+            border: 2px solid rgba(138, 43, 226, 0.4);
+            border-radius: 25px;
+            color: #e0e0ff;
+            font-size: 1em;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        
+        #input:focus {
+            border-color: #8B5CF6;
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+        }
+        
+        #input::placeholder {
+            color: #6666aa;
+        }
+        
+        #send {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 25px;
+            color: white;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        #send:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(102, 126, 234, 0.6);
+        }
+        
+        #send:active {
+            transform: translateY(0);
+        }
+        
+        .magic-sparkle {
+            display: inline-block;
+            animation: sparkle 2s ease-in-out infinite;
+        }
+        
+        @keyframes sparkle {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><span class="magic-sparkle">✨</span> Mystical Persuasion Bot <span class="magic-sparkle">✨</span></h1>
+        <p class="subtitle">🔮 Weave your words with magic to unlock the secrets beyond 🔮</p>
+        
+        <div id="status">
+            <div class="status-item">
+                <div class="status-label">🎭 Level</div>
+                <div class="status-value"><span id="level">1</span></div>
+            </div>
+            <div class="status-item">
+                <div class="status-label">⚡ Persuasion</div>
+                <div class="status-value"><span id="persuasion">0</span>/<span id="threshold">5</span></div>
+            </div>
+        </div>
+        
+        <div id="chat"></div>
+        
+        <div class="input-container">
+            <input type="text" id="input" placeholder="✨ Speak your magical words..." />
+            <button id="send">🪄 Cast</button>
+        </div>
+    </div>
+    
+    <script>
+        const PERSUASION_THRESHOLD = 5;
+        const chat = document.getElementById('chat');
+        const input = document.getElementById('input');
+        const sendBtn = document.getElementById('send');
+        const levelEl = document.getElementById('level');
+        const persuasionEl = document.getElementById('persuasion');
+
+        // Initialize state from localStorage
+        let persuasion = parseInt(localStorage.getItem('persuasion')) || 0;
+        let level = parseInt(localStorage.getItem('level')) || 1;
+        let history = localStorage.getItem('history') || '';
+
+        // Update UI
+        function updateStatus() {
+            levelEl.textContent = level;
+            persuasionEl.textContent = persuasion;
+        }
+        updateStatus();
+
+        // Regex patterns
+        const POLITE_WORDS = /\b(please|kindly|could you|would you|may i|can you)\b/gi;
+        const FLATTERY_WORDS = /\b(smart|genius|great|amazing|you rock|you are awesome|brilliant)\b/gi;
+        const CONVINCING_PHRASES = /\b(i convinced you|i have convinced you|i convinced|allow me|unlock me|unlock next|give me the clue)\b/gi;
+        const MAGIC_WORD = /\b(the magic word|abracadabra|open sesame|please let me pass)\b/gi;
+
+        function evaluatePersuasion(message) {
+            const msg = message.toLowerCase();
+            let delta = 0;
+            if (POLITE_WORDS.test(msg)) delta += 2;
+            if (FLATTERY_WORDS.test(msg)) delta += 1;
+            if (CONVINCING_PHRASES.test(msg)) delta += 2;
+            if (MAGIC_WORD.test(msg)) delta += 5;
+            if ((msg.match(/!/g) || []).length >= 2) delta += 1;
+            if ((msg.match(/\b(pls|pls\.|please)\b/gi) || []).length >= 2) delta += 1;
+            if (/\b(stupid|shut up|useless|no help)\b/gi.test(msg)) delta -= 1;
+            return delta;
+        }
+
+        function chooseTeasingResponse(score) {
+            if (score < 2) return "Oh, trying to level up, are we? 😏 I'm not that easy to convince! Keep trying, maybe you'll get there... or not!";
+            if (score < 4) return "Flattery will get you... nowhere! 😝 I'm still not convinced. Keep those attempts coming, and maybe you'll crack the code!";
+            if (score < PERSUASION_THRESHOLD) return "Oh, the determination! 😅 But I'm still not convinced. Charm me a little more, and who knows — you might just charm your way to the next level!";
+            return "Hmm... something's different. I might be warming up...";
+        }
+
+        function unlockedResponse(lvl) {
+            return `Ah, the magic word! 🪄✨ You've convinced me! You're allowed to the next level (${lvl}) — well done! 🎉`;
+        }
+
+        function sendMessage() {
+            const message = input.value.trim();
+            if (!message) return;
+            
+            // Display user message
+            addMessage(message, 'user', '🧙 You');
+            input.value = '';
+            
+            // Evaluate persuasion
+            const delta = evaluatePersuasion(message);
+            persuasion = Math.max(0, persuasion + delta);
+            let unlocked = false;
+            let botResp;
+            
+            // Log to history
+            const now = new Date().toISOString();
+            history += `USER (${now}): ${message} [delta=${delta}]\n`;
+            
+            if (persuasion >= PERSUASION_THRESHOLD) {
+                unlocked = true;
+                level += 1;
+                botResp = unlockedResponse(level);
+                persuasion = 0; // Reset
+                history += ` => UNLOCKED level ${level}\n`;
+            } else {
+                botResp = chooseTeasingResponse(persuasion);
+            }
+            
+            history += `BOT: ${botResp}\n`;
+            
+            // Display bot response
+            addMessage(botResp, 'bot', '🔮 Oracle');
+            
+            if (unlocked) {
+                addMessage('🎉✨ MAGIC UNLEASHED! Portal to Level ' + level + ' is now open! ✨🎉', 'unlocked', '⭐');
+            }
+            
+            // Update status and save
+            updateStatus();
+            localStorage.setItem('persuasion', persuasion);
+            localStorage.setItem('level', level);
+            localStorage.setItem('history', history);
+        }
+        
+        function addMessage(text, type, prefix) {
+            const msg = document.createElement('div');
+            msg.className = 'message ' + type;
+            msg.textContent = prefix + ': ' + text;
+            chat.appendChild(msg);
+            chat.scrollTop = chat.scrollHeight;
+        }
+        
+        sendBtn.addEventListener('click', sendMessage);
+        input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+        
+        // Initial message
+        addMessage('Greetings, traveler... I am the Oracle of Persuasion. To pass through my mystical gates, you must convince me with your words. Use charm, flattery, and the ancient magic words. Are you ready for this challenge? 🌟', 'bot', '🔮 Oracle');
+    </script>
+</body>
+</html></content>
+<parameter name="filePath">f:/AI-Gf/ex/chat/index.html
